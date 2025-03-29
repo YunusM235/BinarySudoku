@@ -1,3 +1,3 @@
 # BinarySudoku
-![Game1](https://github.com/YunusM235/BinarySudoku/game1.png?raw=true)
-![Game2](https://github.com/YunusM235/BinarySudoku/game2.png?raw=true)
+![Game1](https://github.com/YunusM235/BinarySudoku/blob/main/game1.png)
+![Game2](https://github.com/YunusM235/BinarySudoku/blob/main/game2.png)
