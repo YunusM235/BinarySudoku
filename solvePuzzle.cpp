@@ -4,6 +4,7 @@
 #include "Board.h"
 #include <iostream>
 #include <algorithm>
+#include <iostream>
 
 bool randomBool(){
     static std::mt19937 mt{ std::random_device{}() };
@@ -48,11 +49,17 @@ bool isAllowed(Board& board, Colour::Colour colour, int pos){
     bool rowFull = true;
     for (int i=1;i<=board.rank();i++){
         if (i==row) continue;
-        if (board.valueRC(i,column)==Colour::none) columnFull = false;
+        if (board.valueRC(i,column)==Colour::none){ 
+            columnFull = false;
+            break;
+        }
     }
     for (int i=1;i<=board.rank();i++){
         if (i==column) continue;
-        if (board.valueRC(row,i)==Colour::none) rowFull = false;
+        if (board.valueRC(row,i)==Colour::none){ 
+            rowFull = false;
+            break;
+        }
     }
     bool isEqual;
     if (columnFull){
@@ -104,13 +111,13 @@ bool isBoardSolved(Board &board){
 bool solveBoard(Board& board, int currPos){
 
     // if board is filled
-    if (currPos == (board.rank()*board.rank()+1)) {
+    if (currPos == (board.rank()*board.rank())) {
         return true;
     }
 
     // if the current cell is already Coloured
     if (board.value(currPos) != Colour::none){
-        return solveBoard(board, ++currPos);
+        return solveBoard(board, currPos+1);
     }
 
     // randomly choosing Colours
@@ -158,22 +165,30 @@ Board createPuzzle(int n){
     std::shuffle(squares.begin(), squares.end(), mt);
 
 
-
     //remove random squares such that the solution remains unique
+    Colour::Colour oldColour;
+    int a;
     int count{};
     board.setValue(squares[0], Colour::none);
-    for (int k=0;k<2;k++){
-        for (int i=1;i<n*n;i++){
-            if (board.value(squares[i]) == Colour::none) continue;
-            Colour::Colour oldColour = board.value(squares[i]);
-            board.setValue(squares[i], (oldColour==Colour::black) ? Colour::white : Colour::black);
-            if (isBoardSolvable(board)){
-                board.setValue(squares[i], oldColour);
-            } else {
-                board.setValue(squares[i], Colour::none);
-                count++;
-            }
+
+    for (int i=0;i<n*n;i++){
+        if (board.value(squares[i]) == Colour::none) continue;
+
+        oldColour = board.value(squares[i]);
+
+        Colour::Colour newColour = (oldColour==Colour::black) ? Colour::white : Colour::black;
+        board.setValue(squares[i], newColour);
+        
+        
+        if (isAllowed(board, newColour, squares[i]) && isBoardSolvable(board)){
+            board.setValue(squares[i], oldColour);
+        } else {
+            board.setValue(squares[i], Colour::none);
+            count++;
         }
-    }
+
+    }   
+
+    
     return board;
 }
