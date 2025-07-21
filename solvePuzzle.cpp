@@ -168,9 +168,9 @@ Board createPuzzle(int n){
     //remove random squares such that the solution remains unique
     Colour::Colour oldColour;
     int a;
-    int count{};
     board.setValue(squares[0], Colour::none);
-
+    int count = 1;
+    
     for (int i=0;i<n*n;i++){
         if (board.value(squares[i]) == Colour::none) continue;
 
@@ -186,6 +186,9 @@ Board createPuzzle(int n){
             board.setValue(squares[i], Colour::none);
             count++;
         }
+
+        if (n==8 && count == 45) break;
+        if (n==10 && count == 65) break;
 
     }   
 
