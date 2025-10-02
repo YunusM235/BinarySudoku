@@ -134,7 +134,7 @@ int main(){
 
     std::vector<Music> musicFiles{};
     for (const auto & entry : std::filesystem::directory_iterator("music")){
-        if (entry.path().extension()!=".wav") continue;
+        if (entry.path().extension()!=".mp3") continue;
         musicFiles.push_back(LoadMusicStream(entry.path().string().c_str()));
     }
     std::mt19937 mt{ std::random_device{}() };
